@@ -3,20 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_host"
-    app:startDestination="@id/frag1">
+    app:startDestination="@id/frag3">
 
-    <fragment
-        android:id="@+id/frag1"
-        android:name="com.example.albumnextbutton.frag1"
-        android:label="fragment_homefrag"
-        tools:layout="@layout/fragment_frag1" >
-        <action
-            android:id="@+id/action_frag1_to_broadcastFrag"
-            app:destination="@id/broadcastFrag" />
-        <action
-            android:id="@+id/action_frag1_to_messengerFrag"
-            app:destination="@id/messengerFrag" />
-    </fragment>
     <fragment
         android:id="@+id/broadcastFrag"
         android:name="com.example.albumnextbutton.BroadcastFrag"
@@ -27,6 +15,11 @@
         android:name="com.example.albumnextbutton.MessengerFrag"
         android:label="fragment_messenger"
         tools:layout="@layout/fragment_messenger" />
+    <fragment
+        android:id="@+id/frag3"
+        android:name="com.example.albumnextbutton.frag3"
+        android:label="fragment_frag3"
+        tools:layout="@layout/fragment_frag3" />
 
 
 </navigation>

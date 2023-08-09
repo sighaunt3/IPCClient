@@ -34,6 +34,7 @@ android {
         viewBinding true
         dataBinding true
     }
+    buildFeatures.aidl = true
 }
 
 dependencies {
@@ -44,6 +45,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     // Dependencies
     // retrofit
+
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     // GSON

@@ -18,7 +18,8 @@ import java.util.logging.Logger.global
 class BackgroundService: Service() {
     val apihandler = Handler()
     private var catapi: AlbumService= RetrofitInstance.getRetrofitInstance().create(AlbumService::class.java)
-
+    private val sharedViewModel: SharedLiveData
+        get() = (application as Helper).sharedViewModel
     private val broadcastRunnable = object : Runnable {
         override fun run() {
             GlobalScope.launch {
@@ -26,7 +27,7 @@ class BackgroundService: Service() {
                 val name:String = result.body()?.data.toString()
                 val intent = Intent()
                 println(name)
-
+                sharedViewModel.sharedMutableData.postValue(result.body())
                 intent.action = "com.example.myapplication"
                 intent.putExtra(ContactsContract.Directory.PACKAGE_NAME, packageName)
                 intent.putExtra(ContactsContract.Intents.Insert.DATA, name)
@@ -81,7 +82,6 @@ class BackgroundService: Service() {
             0,
             Intent(this, MainActivity::class.java).apply {
                 // Add the extra value for fragment identification
-                putExtra("FRAGMENT_ID", R.id.frag1)
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             },
             PendingIntent.FLAG_IMMUTABLE
@@ -99,5 +99,8 @@ class BackgroundService: Service() {
         return null
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        apihandler.removeCallbacks(broadcastRunnable)
+    }
 }

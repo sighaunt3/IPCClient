@@ -53,20 +53,6 @@ class frag1 : Fragment(), ServiceConnection {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_frag1, container, false)
 
-        val button2 = view?.findViewById<Button>(R.id.btn2)
-
-        val button = view?.findViewById<Button>(R.id.btn)
-
-        button?.setOnClickListener(){
-            val c = Navigation.findNavController(view)
-            c.navigate(R.id.action_frag1_to_broadcastFrag)
-
-        }
-
-        button2?.setOnClickListener{
-            val c = Navigation.findNavController(view)
-            c.navigate(R.id.action_frag1_to_messengerFrag)
-        }
 
 
         return view

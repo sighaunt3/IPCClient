@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import com.example.albumnextbutton.databinding.FragmentMessengerBinding
@@ -59,7 +60,21 @@ class MessengerFrag : Fragment(), View.OnClickListener{
         sharedButtonListener.sharedButton.postValue(false)
         // Start Service
         println("hey")
-        requireActivity().startForegroundService(Intent(context, MessengerService::class.java))
+        val button = view?.findViewById<Button>(R.id.button)
+        button?.setOnClickListener {
+            if(button.text == "Disconnect"){
+                button.text = "Connect"
+                requireActivity().stopService(Intent(context, MessengerService::class.java))
+
+            }
+            else{
+                button.text = "Disconnect"
+
+                requireActivity().startForegroundService(Intent(context, MessengerService::class.java))
+
+            }
+
+        }
 
         // Observe the MutableLiveData
         sharedViewModel.sharedMutableData.observeForever(dataObserver)

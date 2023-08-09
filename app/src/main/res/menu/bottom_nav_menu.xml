@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_aidl"
+        android:icon="@android:drawable/ic_dialog_dialer"
+        android:title="AIDL METHOD" />
+    <item
+        android:id="@+id/navigation_broadcast"
+        android:icon="@android:drawable/ic_dialog_dialer"
+        android:title="BROADCAST METHOD" />
+
+    <item
+        android:id="@+id/navigation_messenger"
+        android:icon="@android:drawable/ic_dialog_dialer"
+        android:title="MESSENGER METHOD" />
+
+
+
+</menu>
