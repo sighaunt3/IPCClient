@@ -7,12 +7,16 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.ComponentName
 import android.content.Intent
+import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.provider.ContactsContract
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.logging.Logger.global
 
 class BackgroundService: Service() {
@@ -21,20 +25,29 @@ class BackgroundService: Service() {
     private val sharedViewModel: SharedLiveData
         get() = (application as Helper).sharedViewModel
     private val broadcastRunnable = object : Runnable {
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun run() {
             GlobalScope.launch {
+
                 var result = catapi.getFact()
                 val name:String = result.body()?.data.toString()
                 val intent = Intent()
                 println(name)
                 sharedViewModel.sharedMutableData.postValue(result.body())
                 intent.action = "com.example.myapplication"
-                intent.putExtra(ContactsContract.Directory.PACKAGE_NAME, packageName)
+                val current = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+                val formatted = current.format(formatter)
+                println(formatted)
+                intent.putExtra(PACKAGE_NAME, applicationContext?.packageName)
                 intent.putExtra(ContactsContract.Intents.Insert.DATA, name)
+                intent.putExtra(ZAMAN,formatted)
+
                 intent.component = ComponentName(
                     "com.example.messengerserverapplication",
                     "com.example.messengerserverapplication.IPCBroadcastReceiver"
                 )
+                println(intent?.getStringExtra(ZAMAN))
                 sendBroadcast(intent)
             }
             apihandler.postDelayed(this,5000)

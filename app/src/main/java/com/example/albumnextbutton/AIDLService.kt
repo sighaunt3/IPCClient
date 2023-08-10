@@ -19,6 +19,8 @@ import com.example.messengerserverapplication.IIPCExample
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import android.os.Process
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class AIDLService: Service() {
     private var infoUs = RetrofitInstance.getRetrofitInstance().create(AlbumService::class.java)
@@ -46,6 +48,7 @@ class AIDLService: Service() {
                 sharedViewModel.sharedMutableData.postValue(infoUs.getFact().body())
 
                     Log.d("AIDL", "sending apiRunnable")
+
                     iRemoteService?.postVal(
                         applicationContext.packageName,
                         Process.myPid(),
@@ -60,9 +63,13 @@ class AIDLService: Service() {
     }
 
     private val connection = object : ServiceConnection {
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             iRemoteService = IIPCExample.Stub.asInterface(service)
             if(sharedButtonListener.sharedButton.value!!) {
+                val current = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+                val formatted = current.format(formatter)
                 iRemoteService?.postVal(
                     applicationContext.packageName,
                     Process.myPid(),
@@ -181,6 +188,7 @@ class AIDLService: Service() {
     }
 
     // Method to send data to the server application
+    @RequiresApi(Build.VERSION_CODES.O)
     fun sendDataToServer(
         packageName: String?,
         pid: Int,
@@ -191,6 +199,10 @@ class AIDLService: Service() {
             Log.d("AIDL", "Bound and will send message")
             // Call the server application's method using the binder
             try {
+                val current = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+                val formatted = current.format(formatter)
+
                 iRemoteService?.postVal(
                     packageName,
                     pid,

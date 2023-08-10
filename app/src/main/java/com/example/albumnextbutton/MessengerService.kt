@@ -18,12 +18,15 @@ import android.os.Message
 import android.os.Messenger
 import android.os.RemoteException
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.Observer
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import android.R as RESS
 
 
@@ -244,6 +247,7 @@ class MessengerService : Service(){
         super.onTaskRemoved(rootIntent)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun sendMessageToServer(){
         if (serverMessenger == null) {
             // Server service connection is lost or not available
@@ -256,8 +260,12 @@ class MessengerService : Service(){
         val currData = sharedViewModel.sharedMutableData.value?.data
 
         println(currData)
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        val formatted = current.format(formatter)
         bundle.putString(PACKAGE_NAME, applicationContext.packageName)
         bundle.putString(DATA, currData.toString())
+        bundle.putString(ZAMAN,formatted.toString())
         message.data = bundle
         message.replyTo = clientMessenger //for communication to be two-way
 

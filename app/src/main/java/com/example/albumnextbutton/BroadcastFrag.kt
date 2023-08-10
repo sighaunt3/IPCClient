@@ -8,9 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import com.example.albumnextbutton.databinding.FragmentBroadcastBinding
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,6 +26,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class BroadcastFrag : Fragment() {
+
     private val sharedButtonListener: ButtonLiveData
         get() = (requireActivity().application as Helper).sharedButtonListener
 
@@ -41,21 +45,43 @@ class BroadcastFrag : Fragment() {
         _binding = FragmentBroadcastBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     private val dataObserver = Observer<catfact> {
+        var time_text = view?.findViewById<TextView>(R.id.time_sent_id)
+        var time_title =  view?.findViewById<TextView>(R.id.Time_Sent)
         viewBinding.txtServerPid.text = it.data.toString()
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        val formatted = current.format(formatter)
+        time_text?.text = formatted.toString()
+
+
     }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedButtonListener.sharedButton.postValue(false)
         val button = view?.findViewById<Button>(R.id.button)
+
+        var time_text = view?.findViewById<TextView>(R.id.time_sent_id)
+        var time_title =  view?.findViewById<TextView>(R.id.Time_Sent)
         button?.setOnClickListener {
             if (button.text == "Disconnect") {
                 button.text = "Connect"
+                time_title?.visibility = View.INVISIBLE
+                time_text?.visibility = View.INVISIBLE
+
                 requireActivity().stopService(Intent(context, BackgroundService::class.java))
 
             } else {
+                time_title?.visibility = View.VISIBLE
+                time_text?.visibility = View.VISIBLE
+                val current = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+                val formatted = current.format(formatter)
+                time_text?.text = formatted.toString()
                 button.text = "Disconnect"
+
 
                 requireActivity().startForegroundService(
                     Intent(
