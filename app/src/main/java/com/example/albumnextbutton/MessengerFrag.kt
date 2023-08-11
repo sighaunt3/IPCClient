@@ -1,16 +1,25 @@
 package com.example.albumnextbutton
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.albumnextbutton.databinding.FragmentMessengerBinding
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileReader
+import android.Manifest
+import java.io.IOException
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,6 +32,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class MessengerFrag : Fragment(), View.OnClickListener{
+
 
     private val serverprop: ServerLiveData
         get() = (requireActivity().application as Helper).serverprop
@@ -58,8 +68,9 @@ class MessengerFrag : Fragment(), View.OnClickListener{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedButtonListener.sharedButton.postValue(false)
-        // Start Service
         println("hey")
+
+
         val button = view?.findViewById<Button>(R.id.button)
         button?.setOnClickListener {
             if(button.text == "Disconnect"){
@@ -81,13 +92,12 @@ class MessengerFrag : Fragment(), View.OnClickListener{
     }
 
 
+
     override fun onDestroyView() {
         super.onDestroyView()
         requireActivity().stopService(Intent(context, MessengerService::class.java))
         sharedViewModel.sharedMutableData.removeObserver(dataObserver)
     }
-
-
 
     override fun onStart() {
         super.onStart()

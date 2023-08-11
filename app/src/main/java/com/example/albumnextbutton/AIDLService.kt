@@ -209,7 +209,6 @@ class AIDLService: Service() {
                    currData.toString(),
                 )
             }catch (e : Exception){
-                Log.w("ATAKNN", e.stackTraceToString())
             }
         }
     }
