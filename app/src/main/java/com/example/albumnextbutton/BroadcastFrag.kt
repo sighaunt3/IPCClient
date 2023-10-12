@@ -15,16 +15,8 @@ import com.example.albumnextbutton.databinding.FragmentBroadcastBinding
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [BroadcastFrag.newInstance] factory method to
- * create an instance of this fragment.
- */
 class BroadcastFrag : Fragment() {
 
     private val sharedButtonListener: ButtonLiveData
@@ -81,8 +73,6 @@ class BroadcastFrag : Fragment() {
                 val formatted = current.format(formatter)
                 time_text?.text = formatted.toString()
                 button.text = "Disconnect"
-
-
                 requireActivity().startForegroundService(
                     Intent(
                         context,
@@ -95,7 +85,6 @@ class BroadcastFrag : Fragment() {
         sharedViewModel.sharedMutableData.observeForever(dataObserver)
 
     }
-
     override fun onDestroy() {
         super.onDestroy()
         requireActivity().stopService(Intent(context, BackgroundService::class.java))
