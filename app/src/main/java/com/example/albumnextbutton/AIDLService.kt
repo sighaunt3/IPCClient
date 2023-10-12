@@ -41,7 +41,6 @@ class AIDLService: Service() {
     val apiHandler = Handler()
     private val apiRunnable = object : Runnable {
         override fun run() {
-            // Make the API call and update MutableLiveData with the response data
             GlobalScope.launch{
                 Log.d("AIDL", "Fetching data from API")
 
@@ -57,7 +56,6 @@ class AIDLService: Service() {
                     serverprop.serverData.postValue(serverClass)
 
             }
-            // Make the call every minute
             apiHandler.postDelayed(this, 10000)
         }
     }
@@ -86,9 +84,6 @@ class AIDLService: Service() {
         }
     }
 
-
-
-    // apiHandler.removeCallbacks(apiRunnable)
 
     private val dataObserver = Observer<Boolean> {
        connectToRemoteService()
@@ -146,7 +141,6 @@ class AIDLService: Service() {
                 description = descriptionText
             }
 
-            // Register the channel with the system
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }
@@ -164,7 +158,6 @@ class AIDLService: Service() {
             this,
             0,
             Intent(this, MainActivity::class.java).apply {
-                // Add the extra value for fragment identification
                 putExtra("FRAGMENT_ID", R.id.frag3)
             },
             PendingIntent.FLAG_IMMUTABLE
@@ -182,34 +175,22 @@ class AIDLService: Service() {
         apiHandler.removeCallbacks(apiRunnable)
         sharedButtonListener.sharedButton.removeObserver(dataObserver)
         disconnectToRemoteService()
-        // Stop the foreground service and remove the notification
         stopForeground(true)
         super.onDestroy()
     }
 
-    // Method to send data to the server application
     @RequiresApi(Build.VERSION_CODES.O)
     fun sendDataToServer(
         packageName: String?,
         pid: Int,
         currData: catfact
     ) {
-        Log.d("AIDL", "Sending message")
-        if (iRemoteService != null) {
-            Log.d("AIDL", "Bound and will send message")
-            // Call the server application's method using the binder
-            try {
-                val current = LocalDateTime.now()
-                val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-                val formatted = current.format(formatter)
 
-                iRemoteService?.postVal(
-                    packageName,
-                    pid,
-                   currData.toString(),
+            iRemoteService?.postVal(
+                packageName,
+                pid,
+                currData.toString(),
                 )
-            }catch (e : Exception){
-            }
-        }
+       
     }
 }
