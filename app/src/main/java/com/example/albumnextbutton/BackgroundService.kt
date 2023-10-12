@@ -66,22 +66,16 @@ class BackgroundService: Service() {
                 description = descriptionText
             }
 
-            // Register the channel with the system
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }
-
-        // Create the notification for the foreground service
         val notification: Notification = createNotification()
-
-        // Start the service as a foreground service with the notification
         startForeground(2, notification)
 
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         println("hello")
-
         apihandler.post(broadcastRunnable)
         return START_STICKY
 
@@ -94,7 +88,6 @@ class BackgroundService: Service() {
             this,
             0,
             Intent(this, MainActivity::class.java).apply {
-                // Add the extra value for fragment identification
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             },
             PendingIntent.FLAG_IMMUTABLE
